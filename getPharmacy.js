@@ -18,6 +18,6 @@ request(
     null,
     function (data) {
        console.log(data)
-       console.log('当前医院信息已查询完毕')
+       console.log('当前药房信息已查询完毕')
     }
 );
