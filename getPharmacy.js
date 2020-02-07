@@ -1,5 +1,5 @@
 // 在此输入您想查询的药房名称，即可获取信息。 ！！！
-var pharmacyName = ''
+var pharmacyName = '坝下路'
 
 // 加密方法
 var isvData = require("./common/isv");
@@ -9,7 +9,7 @@ var request = require("./common/request");
 var config = require("./config")
 
 var isvUrl = isvData(
-    config.urlFirst + "/mask/pharmacy-search?pharmacyName=" + pharmacyName
+    config.urlFirst + "/mask/pharmacy-search?pharmacyName=" + encodeURI(pharmacyName)
 )
 
 request(
