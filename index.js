@@ -55,12 +55,11 @@ function getMask(arr) {
             res
         ) {
             console.log(res);
-            utils.stopRequestByTimeId(config.timeId)
+            res.succeed && utils.stopRequestByTimeId(config.timeId)
             showEndTime()
         });
     } else {
-        console.log("没有口罩啦，终止请求。");
-        utils.stopRequestByTimeId(config.timeId)
+        console.log("没有口罩啦，终止本次请求。");
         showEndTime()
     }
 }
