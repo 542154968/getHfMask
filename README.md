@@ -11,7 +11,7 @@
 
 ### 使用帮助
 1. `confg.js`中的`getDataInterval`参数是多长时间请求一次，默认是1000ms。
-2. `userData.js`中，依次输入您的个人信息，其中`reservationNumber`为固定的**五个**，请勿改动。
+2. `userData.js`中，依次输入您的个人信息，其中`reservationNumber`为固定的**五个**，请勿改动。因为规定是预约只能预约5个且预约成功后，5天内不可在此预约。
 3. 如果您不知道您要领取的药店的名称和编号，请查阅`common/pharmacy.json`，其中每个数据的`name`值，即为药店名称，其`code`就是药店的编号ID
 
 #### 开始
