@@ -9,7 +9,7 @@ var utils = require("./common/utils")
 // 要发送的数据
 var sendData = require('./userData')
 
-function showEndTime(){
+function showEndTime() {
     console.log(
         "请求完成,用时" +
         (new Date().getTime() - Date.parse(config.startDate)) +
@@ -54,13 +54,18 @@ function getMask(arr) {
         request("POST", isvUrl, sendData, function (
             res
         ) {
-            console.log(res);
-            utils.stopRequestByTimeId(config.timeId)
-            showEndTime()
+            try {
+                res = JSON.parse(res)
+                console.log('获取的数据为', res);
+                res.succeed && utils.stopRequestByTimeId(config.timeId)
+                showEndTime()
+            } catch (error) {
+                showEndTime()
+            }
+
         });
     } else {
-        console.log("没有口罩啦，终止请求。");
-        utils.stopRequestByTimeId(config.timeId)
+        console.log("没有口罩啦，终止本次请求。");
         showEndTime()
     }
 }
@@ -70,6 +75,6 @@ function getMask(arr) {
 
 // 开始请求 
 getMaskCount();
-config.timeId = setInterval(function(){
+config.timeId = setInterval(function () {
     getMaskCount()
 }, config.getDataInterval)
