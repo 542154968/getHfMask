@@ -55,8 +55,8 @@ function getMask(arr) {
             res
         ) {
             try {
-                res = JSON.parse(res)
                 console.log('获取的数据为', res);
+                res = JSON.parse(res)
                 res.succeed && utils.stopRequestByTimeId(config.timeId)
                 showEndTime()
             } catch (error) {
