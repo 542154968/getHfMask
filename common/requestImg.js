@@ -2,34 +2,36 @@
 var http = require("http");
 var config = require('../config')
 
-function request(type, path, param, callback, errback) {
+
+function request(path, param, callback) {
     var options = {
         encoding: null,
         hostname: "kzgm.bbshjz.cn",
         // 端口号 https默认端口 443， http默认的端口号是80
         port: 8000,
         path: path,
-        method: type,
+        method: 'GET',
         // 伪造请求头
         headers: {
-            "Cookie": config.cookie,
-            Accept: "application/json, text/javascript, */*; q=0.01",
+            Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
             // 去除gzip 不然请求回来的是乱码
             // "Accept-Encoding": "gzip, deflate",
             "Accept-Language": "zh-CN,zh;q=0.9",
+            "Cache-Control": "max-age=0",
+            "Cookie": config.cookie,
             Connection: "keep-alive",
             Host: "kzgm.bbshjz.cn:8000",
-            "Content-Type": "application/json;charset=UTF-8",
             "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Mobile Safari/537.36",
-            "X-Requested-With": "XMLHttpRequest"
+            "Upgrade-Insecure-Requests": 1
         }
     };
 
     var req = http.request(options, function (res) {
-        const cookie = res.headers["set-cookie"];
-        Array.isArray(cookie) && cookie[0] && setCookie(cookie[0])
+        // 一定要设置这个
+        res.setEncoding("binary")
         // 定义json变量来接收服务器传来的数据
         var json = "";
+        console.log(res.statusCode);
         // res.on方法监听数据返回这一过程，"data"参数表示数数据接收的过程中，数据是一点点返回回来的，这里的chunk代表着一条条数据
         res.on("data", function (chunk) {
             json += chunk; //json由一条条数据拼接而成
@@ -42,7 +44,6 @@ function request(type, path, param, callback, errback) {
 
     req.on("error", function () {
         console.log("error");
-        typeof errback === 'function' && errback(error)
     });
     // post 请求传参
     req.write(JSON.stringify(param));
@@ -50,11 +51,4 @@ function request(type, path, param, callback, errback) {
     req.end();
 }
 
-
-
-function setCookie(cookie) {
-    const arr = cookie.split(";")
-    config.cookie = Array.isArray(arr) && arr[0] ? arr[0] : ''
-    console.log(config.cookie)
-}
 module.exports = request;

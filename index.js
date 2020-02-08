@@ -2,12 +2,17 @@
 var isvData = require("./common/isv");
 // 请求方法
 var request = require("./common/request");
+var requestImg = require("./common/requestImg");
+var fs = require("fs");
+
 // 公共配置
 var config = require("./config")
 // 工具函数
 var utils = require("./common/utils")
 // 要发送的数据
 var sendData = require('./userData')
+// 获取验证码
+var getCaptcha = require('./common/baidu')
 
 function showEndTime() {
     console.log(
@@ -16,6 +21,8 @@ function showEndTime() {
         "ms"
     );
 }
+
+
 
 // 获取口罩剩余数量
 function getMaskCount() {
@@ -48,6 +55,7 @@ function getMask(arr) {
         var isvUrl = isvData(
             config.urlFirst + "/mask/book"
         )
+
         sendData.pharmacyPhase = maskObj.value;
         sendData.pharmacyPhaseName = maskObj.text;
         console.log('当前发送的个人数据为', sendData)
@@ -64,6 +72,8 @@ function getMask(arr) {
             }
 
         });
+
+
     } else {
         console.log("没有口罩啦，终止本次请求。");
         showEndTime()
@@ -71,10 +81,40 @@ function getMask(arr) {
 }
 
 
+function getCaptchaTextAndStartGetMask() {
+    requestImg(config.urlFirst + "/mask/captcha", null, function (res) {
+        fs.writeFile("test.jpg", res, "binary", function (err) {
+            if (err) {
+                console.log("文件下载失败.");
+            }
+            var image = fs.readFileSync("test.jpg").toString("base64");
+            getCaptcha(image).then(
+                captchaData => {
+                    const captcha = captchaData.words_result[0] && captchaData.words_result[0].words
+                    sendData.captcha = captcha
+                    getMaskCount();
+                    config.timeId = setInterval(function () {
+                        getMaskCount()
+                    }, config.getDataInterval)
+                }
+            )
+        });
+    })
+}
+
+function getCookie() {
+    return new Promise((resolve, reject) => {
+        request('GET', "http://kzgm.bbshjz.cn:8000/ncms/mask/book-view", null, function (res) {
+            resolve()
+        }, function (err) {
+            reject(err)
+        })
+    })
+}
 
 
-// 开始请求 
-getMaskCount();
-config.timeId = setInterval(function () {
-    getMaskCount()
-}, config.getDataInterval)
+getCookie().then(() => {
+    getCaptchaTextAndStartGetMask()
+}).catch(() => {
+    console.log('cookie获取失败，终止')
+})
