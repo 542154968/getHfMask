@@ -81,24 +81,41 @@ function getMask(arr) {
 }
 
 
+const base64Reg = /^data:image\/\w+;base64,/;
+
 function getCaptchaTextAndStartGetMask() {
+
     requestImg(config.urlFirst + "/mask/captcha", null, function (res) {
-        fs.writeFile("test.jpg", res, "binary", function (err) {
-            if (err) {
-                console.log("文件下载失败.");
-            }
-            var image = fs.readFileSync("test.jpg").toString("base64");
-            getCaptcha(image).then(
-                captchaData => {
-                    const captcha = captchaData.words_result[0] && captchaData.words_result[0].words
-                    sendData.captcha = captcha
-                    getMaskCount();
-                    config.timeId = setInterval(function () {
-                        getMaskCount()
-                    }, config.getDataInterval)
+        let imgData = res
+        if (base64Reg.test(res)) {
+            const base64Data = res.replace(/^data:image\/\w+;base64,/, "");
+            imgData = new Buffer(base64Data, 'base64'); // 解码图片
+
+            fs.writeFile("test.jpg", imgData, checkCaptchaData)
+        } else {
+            fs.writeFile("test.jpg", imgData, "binary", checkCaptchaData)
+        }
+
+        function checkCaptchaData() {
+            fs.writeFile("test.jpg", imgData, function (err) {
+                if (err) {
+                    console.log("文件下载失败.");
                 }
-            )
-        });
+                var image = fs.readFileSync("test.jpg").toString("base64");
+                getCaptcha(image).then(
+                    captchaData => {
+                        console.log(captchaData)
+                        const captcha = captchaData.words_result[0] && captchaData.words_result[0].words
+                        sendData.captcha = captcha
+                        getMaskCount();
+                        config.timeId = setInterval(function () {
+                            getMaskCount()
+                        }, config.getDataInterval)
+                    }
+                )
+            });
+        }
+
     })
 }
 
