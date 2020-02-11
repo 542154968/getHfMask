@@ -1,5 +1,9 @@
 // 加密方法
-var isvData = require("./common/isv");
+var {
+    isvData,
+    hex_md5
+} = require("./common/isv");
+
 // 请求方法
 var request = require("./common/request");
 var requestImg = require("./common/requestImg");
@@ -46,7 +50,8 @@ function getMask(arr) {
     var maskObj = utils.findEnableMask(arr);
     if (maskObj) {
         var isvUrl = isvData(config.urlFirst + "/mask/book");
-
+        //                                         c7c7405208624ed90976f0672c09b884
+        sendData.hash = hex_md5(sendData.cardNo + 'c7c7405208624ed90976f0672c09b884')
         sendData.pharmacyPhase = maskObj.value;
         sendData.pharmacyPhaseName = maskObj.text;
         console.log("当前发送的个人数据为", sendData);

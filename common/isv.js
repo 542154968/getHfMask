@@ -76,18 +76,23 @@ function sortParm(init) {
 var hexcase = 0;
 var b64pad = "";
 var chrsz = 8;
+
 function hex_md5(s) {
     return binl2hex(core_md5(str2binl(s), s.length * chrsz));
 }
+
 function b64_md5(s) {
     return binl2b64(core_md5(str2binl(s), s.length * chrsz));
 }
+
 function hex_hmac_md5(key, data) {
     return binl2hex(core_hmac_md5(key, data));
 }
+
 function b64_hmac_md5(key, data) {
     return binl2b64(core_hmac_md5(key, data));
 }
+
 function calcMD5(s) {
     return binl2hex(core_md5(str2binl(s), s.length * chrsz));
 }
@@ -181,15 +186,19 @@ function core_md5(x, len) {
 function md5_cmn(q, a, b, x, s, t) {
     return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b);
 }
+
 function md5_ff(a, b, c, d, x, s, t) {
     return md5_cmn((b & c) | (~b & d), a, b, x, s, t);
 }
+
 function md5_gg(a, b, c, d, x, s, t) {
     return md5_cmn((b & d) | (c & ~d), a, b, x, s, t);
 }
+
 function md5_hh(a, b, c, d, x, s, t) {
     return md5_cmn(b ^ c ^ d, a, b, x, s, t);
 }
+
 function md5_ii(a, b, c, d, x, s, t) {
     return md5_cmn(c ^ (b | ~d), a, b, x, s, t);
 }
@@ -255,4 +264,7 @@ function binl2b64(binarray) {
 }
 
 
-module.exports = isvData
+module.exports = {
+    isvData,
+    hex_md5
+}
