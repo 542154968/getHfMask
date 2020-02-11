@@ -17,8 +17,8 @@ var getCaptcha = require("./common/baidu");
 function showEndTime() {
     console.log(
         "请求完成,用时" +
-            (new Date().getTime() - Date.parse(config.startDate)) +
-            "ms"
+        (new Date().getTime() - Date.parse(config.startDate)) +
+        "ms"
     );
 }
 
@@ -29,7 +29,7 @@ function getMaskCount() {
     );
     config.startDate = new Date();
     console.log("开始请求" + config.startDate.toLocaleString());
-    request("GET", isvUrl, null, function(data) {
+    request("GET", isvUrl, null, function (data) {
         try {
             data = JSON.parse(data);
             var arr = JSON.parse(data.msg);
@@ -50,7 +50,7 @@ function getMask(arr) {
         sendData.pharmacyPhase = maskObj.value;
         sendData.pharmacyPhaseName = maskObj.text;
         console.log("当前发送的个人数据为", sendData);
-        request("POST", isvUrl, sendData, function(res) {
+        request("POST", isvUrl, sendData, function (res) {
             try {
                 console.log("获取的数据为", res);
                 res = JSON.parse(res);
@@ -66,15 +66,23 @@ function getMask(arr) {
     }
 }
 
-const base64Reg = /^data:image\/\w+;base64,/;
+var base64Reg = /^data:image\/\w+;base64,/;
+var SPLIT_STR = 'EAPwD';
+var splitReg = new RegExp(SPLIT_STR, 'g');
 
 function getCaptchaTextAndStartGetMask() {
-    requestImg(config.urlFirst + "/mask/captcha", null, function(res) {
-        let imgData = res;
-        if (base64Reg.test(res)) {
-            const base64Data = res.replace(/^data:image\/\w+;base64,/, "");
-            imgData = new Buffer(base64Data, "base64"); // 解码图片
-
+    requestImg(config.urlFirst + "/mask/captcha", null, function (res) {
+        var imgData = res;
+        // 这段是因为0211号图片解析失败了 对比了大量数据发现从这个 EAPwd 之前的都是不变的，于是我把老的这一部分 替换到现在返回的这一部分 就可以正常解析了
+        if (splitReg.test(res)) {
+            res = res.replace(/\n/g, '')
+            var startStr = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAlAFYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD'
+            var index = res.indexOf(SPLIT_STR) + 5;
+            imgData = startStr + res.substring(index)
+        }
+        if (base64Reg.test(imgData)) {
+            var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
+            imgData = Buffer.from(base64Data, "base64"); // 解码图片
             fs.writeFile("test.jpg", imgData, checkCaptchaData);
         } else {
             fs.writeFile("test.jpg", imgData, "binary", checkCaptchaData);
@@ -87,12 +95,12 @@ function getCaptchaTextAndStartGetMask() {
             var image = fs.readFileSync("test.jpg").toString("base64");
             getCaptcha(image).then(captchaData => {
                 console.log(captchaData);
-                const captcha =
+                var captcha =
                     captchaData.words_result[0] &&
                     captchaData.words_result[0].words;
                 sendData.captcha = captcha;
                 getMaskCount();
-                config.timeId = setInterval(function() {
+                config.timeId = setInterval(function () {
                     getMaskCount();
                 }, config.getDataInterval);
             });
@@ -104,12 +112,12 @@ function getCookie() {
     return new Promise((resolve, reject) => {
         request(
             "GET",
-            "http://kzgm.bbshjz.cn:8000/ncms/mask/book-view",
+            config.urlFirst + "/mask/book-view",
             null,
-            function(res) {
+            function (res) {
                 resolve();
             },
-            function(err) {
+            function (err) {
                 reject(err);
             }
         );
