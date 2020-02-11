@@ -9,6 +9,7 @@
   "author": "542154968@qq.com",
   "license": "ISC",
   "dependencies": {
-    "baidu-aip-sdk": "^2.4.5"
+    "baidu-aip-sdk": "^2.4.5",
+    "cheerio": "^1.0.0-rc.3"
   }
 }
