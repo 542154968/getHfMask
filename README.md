@@ -27,7 +27,7 @@
 1. 首先您要有`Node`环境，如果没有，请百度`Node`安装一个 - -
 2. 运行`npm install`
 3. 在`userData.js`中，按照提示填好**个人信息**和**药店信息**
-4. 在`common/baidu.js`中，填入申请的图像识别的应用 ID 和其他信息。
+4. 在`common/baidu.js`中，填入申请的**百度文字识别**的应用 ID 和其他信息。百度云的[文字识别](https://console.bce.baidu.com/ai/#/ai/ocr/overview/index)，[接入文档](https://cloud.baidu.com/doc/OCR/s/Ok3h7ydf4)
 5. 运行`node index.js` 即可开始请求，执行脚本会立即请求一次，然后默认每 10s 请求一次。请勿高频请求！每天 17:00 可预约第二日口罩。所以您每天 17:00:00 再启动该脚本吧~已经预约到的 5 天不能再预约了哦！如果出现验证码错误请重新启动该脚本。
 
 ##### 题外
