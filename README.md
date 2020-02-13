@@ -20,7 +20,7 @@
 2. `userData.js`中，依次输入您的个人信息，其中`reservationNumber`为固定的**五个**，请勿改动。因为规定是预约只能预约 5 个且预约成功后，5 天内不可再次预约。
 3. 如果您不知道您要领取的药店的名称和编号，请点击`getPharmacy.js`，在第二行`pharmacyName`处输入您想查询的药房名称，然后执行`node getPharmacy.js`即可查阅到相关信息。药房数据格式请查阅`common/pharmacy.json`，其中每个数据的`name`值，即为药店名称，其`code`就是药店的编号 ID。或者[在此查询](http://kzgm.bbshjz.cn:8000/ncms/mask/pharmacy-list)，其中编号 ID 可以通过审查元素或者接口信息中看到。
 4. ![pharmacy](https://github.com/542154968/getHfMask/blob/master/images/pharmacy.jpg)
-5. 0208 日，接口增加了图形验证码，为了破验证，我接入了百度云的[文字识别](https://console.bce.baidu.com/ai/#/ai/ocr/overview/index)，[接入文档](https://cloud.baidu.com/doc/OCR/s/Ok3h7ydf4)
+5. 0208 日，接口增加了图形验证码，为了破验证，我接入了百度云的[文字识别](https://console.bce.baidu.com/ai/#/ai/ocr/overview/index)，[接入文档](https://cloud.baidu.com/doc/OCR/s/Ok3h7ydf4)。进入百度云文字识别,然后创建个应用,之后获取到应用的`APP_ID`, `API_KEY`, `SECRET_KEY`。将这些输入到`common/baidu.js`中。 百度云文字识别暂时是**每日 50000 免费**的，不用担心。
 
 #### 开始
 
