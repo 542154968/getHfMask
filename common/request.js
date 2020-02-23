@@ -20,7 +20,7 @@ function request(type, path, param, callback, errback) {
             Connection: "keep-alive",
             Host: "kzgm.bbshjz.cn:8000",
             "Content-Type": "application/json;charset=UTF-8",
-            "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Mobile Safari/537.36",
+            "User-Agent": "Mozilla/5.0 (Linux; U; Android 2.3.6; zh-cn; GT-S5660 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 MicroMessenger/4.5.255",
             "X-Requested-With": "XMLHttpRequest"
         }
     };
