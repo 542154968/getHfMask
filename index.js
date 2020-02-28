@@ -50,10 +50,12 @@ function getMask(arr) {
     var maskObj = utils.findEnableMask(arr);
     if (maskObj) {
         var isvUrl = isvData(config.urlFirst + "/mask/book");
-        //                                         c7c7405208624ed90976f0672c09b884
-        sendData.hash = hex_md5(sendData.cardNo + 'c7c7405208624ed90976f0672c09b884')
+        // 对方服务器时间和我电脑时间慢了30s 所以减去这个时间
+        var date = String(new Date().getTime() - 30000);
+        sendData.hash = hex_md5(date + 'c7c7405208624ed90976f0672c09b884')
         sendData.pharmacyPhase = maskObj.value;
         sendData.pharmacyPhaseName = maskObj.text;
+        sendData.timestamp = date
         console.log("当前发送的个人数据为", sendData);
         request("POST", isvUrl, sendData, function (res) {
             try {
@@ -117,7 +119,7 @@ function getCookie() {
     return new Promise((resolve, reject) => {
         request(
             "GET",
-            config.urlFirst + "/mask/book-view",
+            config.urlFirst + "/mask/captcha",
             null,
             function (res) {
                 resolve();
