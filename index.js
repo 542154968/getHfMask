@@ -51,7 +51,7 @@ function getMask(arr) {
     if (maskObj) {
         var isvUrl = isvData(config.urlFirst + "/mask/book");
         // 对方服务器时间和我电脑时间慢了30s 所以减去这个时间
-        var date = String(new Date().getTime() - 30000);
+        var date = String(new Date().getTime() - config.dateDifference);
         sendData.hash = hex_md5(date + 'c7c7405208624ed90976f0672c09b884')
         sendData.pharmacyPhase = maskObj.value;
         sendData.pharmacyPhaseName = maskObj.text;

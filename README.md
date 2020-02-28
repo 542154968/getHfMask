@@ -13,6 +13,7 @@
 7. 为啥不用 ES6？因为我从网上抄的一段 request 请求方法，而且加密的也是 ES5，于是就统一 ES5，还兼容低版本 Node。哈哈哈哈哈。。。。
 8. 由于预约网站加入了图形验证码和 cookie / IP(猜测，未证实)机制，不能同个时间大量请求，会导致禁止请求。
 9. 手机为主，脚本为辅。手机为主，脚本为辅。手机为主，脚本为辅。！！！因为不能知道对方是否改接口。
+10. 由于`hash`生成的规则在`2020-02-28`日修改了，新规则是当前时间戳 + 秘钥。`config.js`中新增了时间差(`dateDifference`)字段，默认 `30000s` ,这个是我电脑和时间和对方服务器时间的大概误差，如果一直是请求频繁，可以尝试修改这个时间。
 
 ### 使用帮助
 
@@ -36,3 +37,7 @@
 1. 就在刚才我预约到了口罩，很开心，自己写的脚本有用~嘻嘻
 2. ![requestInfo](https://github.com/542154968/getHfMask/blob/master/images/requestInfo.png)
 3. ![getMaskDetail](https://github.com/542154968/getHfMask/blob/master/images/getMaskDetail.jpg)
+
+###### 更新日志
+
+1. 2020-02-28。 cookie 的获取现在在获取验证码的接口中。 hash 字段的生成规则改为对方服务器时间 + 固定秘钥。 并且时间是 4s 更新一次，由于我们每次都是重新请求，所以不考虑 4s 的规则。![20200228破解成功图片](https://github.com/542154968/getHfMask/blob/master/images/20200228.png)
