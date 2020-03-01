@@ -40,4 +40,4 @@
 
 ###### 更新日志
 
-1. 2020-02-28。 cookie 的获取现在在获取验证码的接口中。 hash 字段的生成规则改为对方服务器时间 + 固定秘钥。 并且时间是 4s 更新一次，由于我们每次都是重新请求，所以不考虑 4s 的规则。![20200228破解成功图片](https://github.com/542154968/getHfMask/blob/master/images/20200228.png)
+1. 2020-02-28。 cookie 的获取现在在获取验证码的接口中。 hash 字段的生成规则改为对方服务器时间 + 固定秘钥。 并且时间是 4s 更新一次，由于我们每次都是重新请求，所以不考虑 4s 的规则。![20200228破解成功图片](https://github.com/542154968/getHfMask/blob/master/images/20200228.png) ![20200301预约成功图片](https://github.com/542154968/getHfMask/blob/master/images/20200301.png)
